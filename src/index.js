@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 // Keep server alive by pinging itself every 14 minutes
 cron.schedule("*/14 * * * *", async () => {
     try {
-        const serverUrl = process.env.SERVER_URL || "https://your-render-url.onrender.com";
+        const serverUrl = process.env.SERVER_URL || "https://node-server-for-esp32.onrender.com";
         console.log("Pinging self to stay alive:", serverUrl);
         await axios.get(serverUrl);
     } catch (error) {
