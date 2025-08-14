@@ -4,7 +4,7 @@
   "description": "Node.js server to receive ESP32 ID and stay alive on Render",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node src/index.js"
   },
   "keywords": [],
   "author": "",
