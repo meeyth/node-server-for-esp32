@@ -491,3 +491,59 @@ export const calculateEmissionbyentrance = async (req, res) => {
   }
 };
 
+
+
+
+// controllers/emission.controllers.js
+
+export const getEmissionbyentrance = async (req, res) => {
+  try {
+    const { entrance } = req.body;
+
+    if (!entrance) {
+      return res.status(400).json({ message: "Entrance is required" });
+    }
+
+    // 7️⃣ Weekly aggregation (last 7 days)
+    const today = new Date();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(today.getDate() - 6);
+
+    const emissions = await VehicleEmission.aggregate([
+      {
+        $match: {
+          entrance: entrance,
+          createdAt: { $gte: sevenDaysAgo, $lte: today }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }
+          },
+          totalEmission: { $sum: "$totalEmission" },
+          totalVehicles: { $sum: 1 }
+        }
+      },
+      { $sort: { "_id.date": 1 } }
+    ]);
+
+    // ✅ Format for chart rendering
+    const chartData = emissions.map(e => ({
+      date: e._id.date,
+      totalEmission: e.totalEmission,
+      totalVehicles: e.totalVehicles
+    }));
+
+    // ✅ Response
+    res.status(200).json({
+      message: "Weekly emission trend",
+      entrance,
+      data: chartData
+    });
+
+  } catch (error) {
+    console.error("Weekly emissions error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
