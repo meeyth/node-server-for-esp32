@@ -498,7 +498,7 @@ export const calculateEmissionbyentrance = async (req, res) => {
 
 export const getEmissionbyentrance = async (req, res) => {
   try {
-    const { entrance } = req.body;
+    const { entId: entrance } = req.params;
 
     if (!entrance) {
       return res.status(400).json({ message: "Entrance is required" });
