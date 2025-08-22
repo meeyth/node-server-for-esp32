@@ -6,7 +6,7 @@ const router = express.Router();
     // Route to calculate emission 
 // router.post("/calculate", calculateEmission);
     // Route to calculate emission by entrance
-router.get("/calculate/entrance", calculateEmissionbyentrance);
+router.post("/calculate/entrance", calculateEmissionbyentrance);
 
 
 export default router;
